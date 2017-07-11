@@ -1,0 +1,62 @@
+
+
+service: rds-auto-parking
+
+provider:
+  name: aws
+  runtime: python2.7
+  profile: firstwatch
+  region: us-east-1
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - rds:DescribeDBInstances
+        - rds:StopDBInstance
+        - rds:StartDBInstance
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteItem
+        - dynamodb:GetItem
+        - dynamodb:ListTables
+        - dynamodb:PutItem
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:table/rds_autoparking_config"
+
+functions:
+  rds_auto_parking:
+    handler: lambda.handler
+    events:
+     - schedule: rate(5 minutes)
+
+resources:
+  Resources:
+    rdsautoparking:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: rds_autoparking_config
+        AttributeDefinitions:
+          - AttributeName: rds_instance
+            AttributeType: S
+          - AttributeName: day_of_week
+            AttributeType: S
+        KeySchema:
+          - AttributeName: rds_instance
+            KeyType: HASH
+          - AttributeName: day_of_week
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    rdsinstance:
+      Type: AWS::RDS::DBInstance
+      Properties:
+        DBInstanceIdentifier: new-rds-database
+        DBInstanceClass: db.t2.micro
+        AllocatedStorage: 5
+        Engine: mysql
+        MasterUsername: test
+        MasterUserPassword: insecurepassword
