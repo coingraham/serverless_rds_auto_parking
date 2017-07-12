@@ -17,9 +17,9 @@ Run "serverless deploy" to install the project
 ## What is installed
 
 This project when run as configured will create the following:
-Lambda function -- Cost ~$.0005/day. 
-DynamoDB table -- Cost $.59/month. 
-RDS instance -- Cost $.017/hr. 
+Lambda function -- Cost ~$.0005/day.  
+DynamoDB table -- Cost $.59/month.  
+RDS instance -- Cost $.017/hr.  
 
 ## Configuring Auto Park
 
