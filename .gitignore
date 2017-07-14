@@ -1,3 +1,6 @@
+# git ignore
+.git*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -97,5 +100,7 @@ ENV/
 # mkdocs documentation
 /site
 
+# Serverless
+.serverless
 # mypy
 .mypy_cache/
